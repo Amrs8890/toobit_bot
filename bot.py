@@ -30,7 +30,7 @@ if not TOKEN:
 def requires_license(func):
      def wrapper(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return  func(update, context)
-    return wrapper
+        return  wrapper
 
 # ------------------------------------------------
 #  بخش B: دستورات ربات
@@ -181,3 +181,4 @@ def main():
 if __name__ == "__main__":
 
     main()
+
