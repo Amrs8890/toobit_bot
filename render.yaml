@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: toobit-bot
+    env: python
+    pythonVersion: 3.10
+    startCommand: python bot.py
