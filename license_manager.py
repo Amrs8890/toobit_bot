@@ -1,71 +1,85 @@
-import json
 import os
 import time
-import random
-import string
+from dotenv import load_dotenv
 
-DB_FILE = "db.json"
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram.ext import (
+    Updater,
+    CommandHandler,
+    CallbackQueryHandler,
+    CallbackContext,
+)
 
-# بارگذاری دیتابیس
-def load_db():
-    if not os.path.exists(DB_FILE):
-        return {"users": {}, "licenses": {}}
-    with open(DB_FILE, "r", encoding="utf-8") as f:
-        return json.load(f)
+# -------------------------------
+# تنظیمات اولیه
+# -------------------------------
 
-# ذخیره دیتابیس
-def save_db(db):
-    with open(DB_FILE, "w", encoding="utf-8") as f:
-        json.dump(db, f, indent=4, ensure_ascii=False)
+load_dotenv()
 
-# ساخت کد اشتراک
-def generate_license(days):
-    db = load_db()
-    code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=12))
+TOKEN = os.getenv("BOT_TOKEN")
+ADMIN_CHAT_ID = int(os.getenv("ADMIN_CHAT_ID", "0"))
 
-    expire_time = int(time.time()) + (days * 86400)
+if not TOKEN:
+    raise ValueError("BOT_TOKEN پیدا نشد")
 
-    db["licenses"][code] = {
-        "days": days,
-        "expire_time": expire_time,
-        "used": False
-    }
+# -------------------------------
+# دستورات
+# -------------------------------
 
-    save_db(db)
-    return code
+def start(update: Update, context: CallbackContext):
+    user = update.effective_user
 
-# فعال‌سازی کد اشتراک
-def activate_license(user_id, code):
-    db = load_db()
+    text = f"""سلام {user.first_name} 👋
+ربات آماده استفاده است ✅
+"""
 
-    if code not in db["licenses"]:
-        return False, "❌ کد معتبر نیست!"
+    keyboard = [
+        [InlineKeyboardButton("🚀 شروع ربات", callback_data="start_trading")],
+    ]
 
-    lic = db["licenses"][code]
+    if user.id == ADMIN_CHAT_ID:
+        keyboard.append(
+            [InlineKeyboardButton("🛠 پنل ادمین", callback_data="admin")]
+        )
 
-    if lic["used"]:
-        return False, "❌ این کد قبلاً استفاده شده!"
+    update.message.reply_text(
+        text,
+        reply_markup=InlineKeyboardMarkup(keyboard)
+    )
 
-    # ثبت اشتراک برای کاربر
-    db["users"][str(user_id)] = {
-        "expire": lic["expire_time"]
-    }
 
-    # علامت‌گذاری که استفاده شده
-    lic["used"] = True
-    save_db(db)
+def button_callback(update: Update, context: CallbackContext):
+    query = update.callback_query
+    query.answer()
 
-    return True, "✔ اشتراک شما فعال شد!"
+    data = query.data
 
-# بررسی دسترسی
-def check_user_access(user_id):
-    db = load_db()
-    user = db["users"].get(str(user_id))
+    if data == "start_trading":
+        query.message.reply_text("🚀 ربات شروع به کار کرد")
 
-    if not user:
-        return False
+    elif data == "admin" and query.from_user.id == ADMIN_CHAT_ID:
+        query.message.reply_text("🛠 پنل ادمین فعال شد")
 
-    if time.time() > user["expire"]:
-        return False
+    else:
+        query.message.reply_text("❌ دستور نامعتبر")
 
-    return True
+
+# -------------------------------
+# اجرای ربات
+# -------------------------------
+
+def main():
+    print("🤖 Bot is running...")
+
+    updater = Updater(token=TOKEN, use_context=True)
+    dp = updater.dispatcher
+
+    dp.add_handler(CommandHandler("start", start))
+    dp.add_handler(CallbackQueryHandler(button_callback))
+
+    updater.start_polling()
+    updater.idle()
+
+
+if __name__ == "__main__":
+    main()
