@@ -4,13 +4,6 @@ from dotenv import load_dotenv
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Updater, CommandHandler, CallbackQueryHandler
 
-from license_manager import (
-    generate_license,
-    activate_license,
-    check_user_access,
-    load_db,
-)
-
 # -------------------- تنظیمات --------------------
 
 load_dotenv()
@@ -21,17 +14,6 @@ if not TOKEN:
     raise ValueError("BOT_TOKEN پیدا نشد")
 
 # -------------------- دکوراتور --------------------
-
-def requires_license(func):
-    def wrapper(update, context):
-        user_id = update.effective_user.id
-        if check_user_access(user_id):
-            return func(update, context)
-        else:
-            update.message.reply_text(
-                "❌ اشتراک فعال نیست.\nاز /activate استفاده کن."
-            )
-    return wrapper
 
 # -------------------- دستورات --------------------
 
@@ -75,14 +57,7 @@ def button_callback(update, context):
             reply_markup=InlineKeyboardMarkup(keyboard)
         )
 
-    elif data.startswith("gen") and str(query.from_user.id) == ADMIN_CHAT_ID:
-        if data == "gen30":
-            code = generate_license(30)
-        elif data == "gen90":
-            code = generate_license(90)
-        else:
-            code = generate_license(99999)
-
+  
         query.message.reply_text(f"کد ساخته شد:\n{code}")
 
 def activate_cmd(update, context):
@@ -142,3 +117,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
