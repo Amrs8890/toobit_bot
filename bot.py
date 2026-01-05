@@ -102,7 +102,7 @@ def admin_list_users(update, context):
 def main():
     print("🤖 Bot is running...")
 
-    updater = Updater(TOKEN, use_context=True)
+    updater = Updater
     dp = updater.dispatcher
 
     dp.add_handler(CommandHandler("start", start))
@@ -116,5 +116,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
