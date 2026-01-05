@@ -79,7 +79,6 @@ def my_status(update, context):
     exp = db["users"][str(user_id)]["expire"]
     update.message.reply_text(f"✔ فعال تا:\n{time.ctime(exp)}")
 
-@requires_license
 def start_trading(update, context):
     if hasattr(update, "message") and update.message:
         update.message.reply_text("🚀 ربات شروع شد!")
@@ -117,4 +116,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
