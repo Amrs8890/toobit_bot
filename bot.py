@@ -102,17 +102,18 @@ def admin_list_users(update, context):
 def main():
     print("🤖 Bot is running...")
    
-    dp.add_handler(CommandHandler("start", start))
-    dp.add_handler(CommandHandler("activate", activate_cmd))
-    dp.add_handler(CommandHandler("my_status", my_status))
-    dp.add_handler(CommandHandler("admin_list_users", admin_list_users))
-    dp.add_handler(CallbackQueryHandler(button_callback))
+    add_handler(CommandHandler("start", start))
+    add_handler(CommandHandler("activate", activate_cmd))
+    add_handler(CommandHandler("my_status", my_status))
+    add_handler(CommandHandler("admin_list_users", admin_list_users))
+    add_handler(CallbackQueryHandler(button_callback))
 
     updater.start_polling()
     updater.idle()
 
 if __name__ == "__main__":
     main()
+
 
 
 
