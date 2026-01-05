@@ -101,16 +101,20 @@ def admin_list_users(update, context):
 
 def main():
     print("🤖 Bot is running...")
-   
+
+    application = Application.builder().token(TOKEN).build()
+    
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("activate", activate_cmd))
     application.add_handler(CommandHandler("my_status", my_status))
     application.add_handler(CommandHandler("admin_list_users", admin_list_users))
     application.add_handler(CallbackQueryHandler(button_callback))
 
-   
+   application.run_polling()
+
 if __name__ == "__main__":
     main()
+
 
 
 
