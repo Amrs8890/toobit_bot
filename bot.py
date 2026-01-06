@@ -2,7 +2,7 @@ import os
 import time
 from dotenv import load_dotenv
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import Updater, CommandHandler, CallbackQueryHandler
+from telegram.ext import Application, CommandHandler, CallbackQueryHandler
 
 # -------------------- تنظیمات --------------------
 
@@ -114,6 +114,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
