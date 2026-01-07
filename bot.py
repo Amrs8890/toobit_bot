@@ -2,7 +2,6 @@ import os
 import time
 from dotenv import load_dotenv
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import Application, CommandHandler, CallbackQueryHandler
 
 # -------------------- تنظیمات --------------------
 
@@ -101,9 +100,7 @@ def admin_list_users(update, context):
 
 def main():
     print("🤖 Bot is running...")
-
-    application = Application.builder().token(TOKEN).build()
-    
+  
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("activate", activate_cmd))
     application.add_handler(CommandHandler("my_status", my_status))
@@ -114,6 +111,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
