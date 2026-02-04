@@ -4,7 +4,6 @@ from dotenv import load_dotenv
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import (
-    Updater,
     CommandHandler,
     CallbackQueryHandler,
     CallbackContext,
@@ -83,3 +82,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
