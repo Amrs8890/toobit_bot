@@ -61,25 +61,3 @@ def button_callback(update: Update, context: CallbackContext):
 
     else:
         query.message.reply_text("❌ دستور نامعتبر")
-
-
-# -------------------------------
-# اجرای ربات
-# -------------------------------
-
-def main():
-    print("🤖 Bot is running...")
-
-    updater = Updater(token=TOKEN, use_context=True)
-    dp = updater.dispatcher
-
-    dp.add_handler(CommandHandler("start", start))
-    dp.add_handler(CallbackQueryHandler(button_callback))
-
-    updater.start_polling()
-    updater.idle()
-
-
-if __name__ == "__main__":
-    main()
-
